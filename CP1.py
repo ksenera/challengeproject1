@@ -27,6 +27,14 @@ def generatorHb(n):
         x.append(1.0)
 
 # n-vector b=Hx 
+    b = [] 
+    for i in range(n):
+        b_i = 0.0
+        for j in range(n):
+            b_i = b_i + H[i][j] * x[j]
+        b.append(b_i)
+
+    return H, b
 
 
 # lower triangle system Lx = b
@@ -66,17 +74,17 @@ def back_sub(U, b):
     return x
 
 # Gaussian Elimination using Partial Pivoting solving Ax = b
-def gauss_elim(A_matrix, b_vector):
+def gauss_elim(A, b):
     # declare A system and b vector 
-    n = len(A_matrix)
+    n = len(A)
     # want to modify only local copies of A sys and b vec 
-    A = [row[:] for row in A_matrix]
-    b = b_vector[:]
+    A = [row[:] for row in A]
+    b = b[:]
     # A2 Note asks to print transformation at each step of elim + pivot
-    print("Copy of A_matrix: ")
-    for row in A:
-        print(row)
-    print(f"Copy of b_vector: {b}")
+    #print("Copy of A_matrix: ")
+    #for row in A:
+    #    print(row)
+    #print(f"Copy of b_vector: {b}")
 
     # from ALGO 2.4 for pivoting steps
     # for k = 1 to n - 1 {loop over cols.}
@@ -88,24 +96,24 @@ def gauss_elim(A_matrix, b_vector):
                 p = i
         # if p != k then interchange rows k and p {interchange rows if necessary}
         if p != k:
-            print(f"Swapping row {k} with row {p}")
+            #print(f"Swapping row {k} with row {p}")
             A[k], A[p] = A[p], A[k]
             b[k], b[p] = b[p], b[k]
             for row in A:
                 print(row)
-            print(f"Updated b: {b}\n")
+            #print(f"Updated b: {b}\n")
         # in Algo 2.4 this line is line 2 of Algo 2.3 
         # if akk = 0 then stop {stop if pivot is zero}
         if A[k][k] == 0:  # if a_kk = 0 then stop
-            print("Error: break if pivot is zero")
+            #print("Error: break if pivot is zero")
             break
 
-        print(f"Elimination for Column {k}")
+        #print(f"Elimination for Column {k}")
         # for j = k + 1 to n {compute multipliers for current col}
         for i in range(k+1, n):
             # mik = aik/akk 
             m_ik = A[i][k] / A[k][k]
-            print(f"Multiplier m_{i}{k} = {m_ik:.2f}")
+            #print(f"Multiplier m_{i}{k} = {m_ik:.2f}")
 
             A[i][k] = 0 
 
@@ -119,42 +127,28 @@ def gauss_elim(A_matrix, b_vector):
             b[i] = b[i] - m_ik * b[k]
 
         # printing as per assignment 
-        for row in A:
-            print([round(val, 2) for val in row])
-        print(f"Updated b: {[round(val, 2) for val in b]}\n")
+        #for row in A:
+            #print([round(val, 2) for val in row])
+        #print(f"Updated b: {[round(val, 2) for val in b]}\n")
 
     x = back_sub(A, b)
     return x
 
 if __name__ == "__main__":
-    # ex 2.10 lower triangular matrix L
-    L = [[4.0, 0.0, 0.0],
-         [2.0, -2.0, 0.0],
-         [1.0, 3.0, 4.0]]
+    n = 2
+    while n <= 10:
+        # generate the Hilbert matrix and vector b
+        H, b = generatorHb(n)
 
-    # RHS vector b
-    b1 = [1.0, -2.0, 19.0]
+        # solve for approximate x Hx̂ = b
+        x_hat = gauss_elim(H, b)
+    
+        # Find the ∞ −norm of the residual 𝒓 = 𝒃 − 𝑯x̂
+        r = [] 
+        for i in range(n):
+            r_i = b[i]
+            for j in range(n):
+                r_i = r_i - H[i][j] * x_hat[j]
 
-    # Solve the system
-    x_vector1 = forward_sub(L, b1)
-
-    print(x_vector1)
-
-    # ex 2.13 upper triangular matrix U
-    U = [[1.0, 3.0, 4.0],
-         [0.0, -2.0, 2.0],
-         [0.0, 0.0, 4.0]]
-
-    # RHS vector b
-    b2 = [11.0, -2.0, 4.0]
-
-    # Solve the system
-    x_vector2 = back_sub(U, b2)
-
-    print(x_vector2)
-
-    #ans = gauss_elim(A_matrix, b_vector)
-
-    #if ans:
-        #print("FINAL SOLUTION x vector:")
-        #print([round(val, 2) for val in ans])
+        print(f"\nx̂ = {x_hat}")
+        print(f"r = {r}")
