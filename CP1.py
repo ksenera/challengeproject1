@@ -12,9 +12,16 @@ INSTRUCTOR: Gagan Sidhu
 |1/3 1/4 1/5 ...|
 | :   :   :   ⋱|
 """
-def generatorHb(H, b):
-    return H,b
+def generatorHb(n):
+    # empty n x n matrix
+    H = []
+    for i in range(n):
+        row = []
+        for j in range(n):
+            row.append(1.0/(i+j+1))
+        H.append(row)
 
+# using x, a n-vector with all entries equal to 1
 
 
 # lower triangle system Lx = b
@@ -141,8 +148,8 @@ if __name__ == "__main__":
 
     print(x_vector2)
 
-    ans = gauss_elim(A_matrix, b_vector)
+    #ans = gauss_elim(A_matrix, b_vector)
 
-    if ans:
-        print("FINAL SOLUTION x vector:")
-        print([round(val, 2) for val in ans])
+    #if ans:
+        #print("FINAL SOLUTION x vector:")
+        #print([round(val, 2) for val in ans])
