@@ -5,7 +5,17 @@ COURSE    : SFWRTECH 4MA3 - Numerical Linear Algebra and Numerical Optimization
 INSTRUCTOR: Gagan Sidhu
 """
 
-# 
+# A 𝑛 × 𝑛 Hilbert matrix has entries 𝐻ij = 1/ i + j -1, so form 
+"""
+|1   1/2 1/3 ...|
+|1/2 1/3 1/4 ...|
+|1/3 1/4 1/5 ...|
+| :   :   :   ⋱|
+"""
+def generatorHb(H, b):
+    return H,b
+
+
 
 # lower triangle system Lx = b
 def forward_sub(L, b):
