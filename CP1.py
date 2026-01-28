@@ -139,6 +139,7 @@ if __name__ == "__main__":
     while n <= 10:
         # generate the Hilbert matrix and vector b
         H, b = generatorHb(n)
+        
 
         # solve for approximate x Hx̂ = b
         x_hat = gauss_elim(H, b)
@@ -149,6 +150,21 @@ if __name__ == "__main__":
             r_i = b[i]
             for j in range(n):
                 r_i = r_i - H[i][j] * x_hat[j]
+        # Find the error 𝚫𝒙 = 𝒙2 − 𝒙, where x is the true solution, 
+        # i.e., the n-vector with all entries equal to 1 
+        delta_x = []
+        for i in range(n):
+            delta_x.append(x_hat[i] - x[i])
+
 
         print(f"\nx̂ = {x_hat}")
         print(f"r = {r}")
+        print(f"Δx = {delta_x}")
+
+        error = max(abs(val) for val in delta_x)
+
+        #  error reaching 100% end while loop 
+        if error >= 1.0:
+            break 
+
+        n += 1
