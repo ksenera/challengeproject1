@@ -22,6 +22,11 @@ def generatorHb(n):
         H.append(row)
 
 # using x, a n-vector with all entries equal to 1
+    x = []
+    for i in range(n):
+        x.append(1.0)
+
+# n-vector b=Hx 
 
 
 # lower triangle system Lx = b
